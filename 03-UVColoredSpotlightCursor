@@ -1,0 +1,24 @@
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution; 
+uniform vec2 u_mouse; 
+uniform float u_time;
+
+void main() {
+	vec2 st = gl_FragCoord.xy/u_resolution; 
+
+    //1. SPOTLIGHT WITH POSITION-BASED COLOR
+    //let's make a spotlight that follows the mouse, and have it change color depending on where the mouse is.
+    
+    //normalize mouse position into a value from 0-1
+    vec2 mouseValue = u_mouse/u_resolution; 
+    //get a value based on distance from the mouse position, to the pixel being rendered by this fragment.
+    float len = distance(st, mouseValue);    
+    //if you render the above values out, it looks like a black circle on a white bg
+    //i'm using 1 minus here to invert it to make it a white circle on a black bg.
+    gl_FragColor = vec4(1.0-len, 1.0-len, 1.0-len, 1);
+    //then, i can multiply the white circle by a color based on mouse position!
+    gl_FragColor *= vec4(mouseValue.x, mouseValue.y, 0.0, 1.0);
+}
